@@ -9,10 +9,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.List;
 
 @Component
 public class DatabaseManager {
@@ -41,8 +39,6 @@ public class DatabaseManager {
     }
 
     public int addNewLink(String link) {
-//        String query = "INSERT INTO links (`url`) VALUES (?);";
-//        template.update(query, link);
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         template.update(connection -> {
@@ -50,6 +46,6 @@ public class DatabaseManager {
             ps.setString(1, link);
             return ps;
         }, keyHolder);
-        return (int) keyHolder.getKey().intValue();
+        return keyHolder.getKey().intValue();
     }
 }

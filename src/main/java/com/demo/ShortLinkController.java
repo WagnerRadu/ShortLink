@@ -1,6 +1,5 @@
 package com.demo;
 
-import com.demo.model.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,19 +25,24 @@ public class ShortLinkController {
         try {
             id = dbManager.getIdByLink(link);
             String shortLink = shortLinkCode.codeURL(id);
-            ResponseEntity<?> response = new ResponseEntity<>(shortLink, HttpStatus.OK);
+            ResponseEntity<?> response = new ResponseEntity<>("localhost:9003/" + shortLink, HttpStatus.OK);
             System.out.println(id);
             System.out.println(shortLink);
             return response;
         } catch (NullPointerException e) {
             id = dbManager.addNewLink(link);
             String shortLink = shortLinkCode.codeURL(id);
-            return new ResponseEntity<>("New entry will be created in DB with id " + id, HttpStatus.OK);
+            return new ResponseEntity<>("localhost:9003/" + shortLink, HttpStatus.OK);
         }
     }
 
-    @GetMapping("/getLink/{id}")
-    public void getLongURL(@PathVariable String id) {
-        System.out.println(dbManager.getLinkById(Integer.parseInt(id)));
+    @GetMapping("/{shortLink}")
+    public ResponseEntity<?> getLongURL(@PathVariable String shortLink) {
+        int id = shortLinkCode.decodeURL(shortLink);
+        String link = dbManager.getLinkById(id);
+        HttpHeaders responseHeader = new HttpHeaders();
+        responseHeader.set("location", link);
+        ResponseEntity<?> response = new ResponseEntity<>(responseHeader, HttpStatus.PERMANENT_REDIRECT);
+        return response;
     }
 }
