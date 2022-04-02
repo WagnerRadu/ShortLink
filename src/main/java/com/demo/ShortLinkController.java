@@ -21,10 +21,20 @@ public class ShortLinkController {
     }
 
     @PostMapping("/code")
-    public ResponseEntity<?> codeLink(@RequestBody URL link) {
-        String shortLink = shortLinkCode.codeURL(1535);
-        ResponseEntity<?> response = new ResponseEntity<>(shortLink, HttpStatus.OK);
-        return response;
+    public ResponseEntity<?> codeLink(@RequestBody String link) {
+        int id;
+        try {
+            id = dbManager.getIdByLink(link);
+            String shortLink = shortLinkCode.codeURL(id);
+            ResponseEntity<?> response = new ResponseEntity<>(shortLink, HttpStatus.OK);
+            System.out.println(id);
+            System.out.println(shortLink);
+            return response;
+        } catch (NullPointerException e) {
+            id = dbManager.addNewLink(link);
+            String shortLink = shortLinkCode.codeURL(id);
+            return new ResponseEntity<>("New entry will be created in DB with id " + id, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/getLink/{id}")
