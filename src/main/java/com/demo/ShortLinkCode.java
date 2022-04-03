@@ -5,12 +5,8 @@ import org.springframework.stereotype.Component;
 @Component //Sau @Service?
 public class ShortLinkCode {
 
-    public ShortLinkCode() {
-        System.out.println("Component instatiated");
-    }
-
     public String codeURL(int id) {
-        char map[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+        char[] map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         StringBuilder shortLink = new StringBuilder();
         while(id > 0) {
             shortLink.append(map[id % 62]);

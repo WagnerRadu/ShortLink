@@ -15,20 +15,13 @@ public class ShortLinkController {
     @Autowired
     private DatabaseManager dbManager;
 
-    public ShortLinkController(){
-        System.out.println("Controller instantiated");
-    }
-
-    @PostMapping("/code")
+    @PostMapping("/shortenLink")
     public ResponseEntity<?> codeLink(@RequestBody String link) {
         int id;
         try {
             id = dbManager.getIdByLink(link);
             String shortLink = shortLinkCode.codeURL(id);
-            ResponseEntity<?> response = new ResponseEntity<>("localhost:9003/" + shortLink, HttpStatus.OK);
-            System.out.println(id);
-            System.out.println(shortLink);
-            return response;
+            return new ResponseEntity<>("localhost:9003/" + shortLink, HttpStatus.OK);
         } catch (NullPointerException e) {
             id = dbManager.addNewLink(link);
             String shortLink = shortLinkCode.codeURL(id);
@@ -42,7 +35,7 @@ public class ShortLinkController {
         String link = dbManager.getLinkById(id);
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set("location", link);
-        ResponseEntity<?> response = new ResponseEntity<>(responseHeader, HttpStatus.PERMANENT_REDIRECT);
-        return response;
+        return new ResponseEntity<>(responseHeader, HttpStatus.PERMANENT_REDIRECT);
     }
 }
+
