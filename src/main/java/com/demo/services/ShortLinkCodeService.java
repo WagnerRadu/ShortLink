@@ -1,9 +1,9 @@
-package com.demo;
+package com.demo.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component //Sau @Service?
-public class ShortLinkCode {
+@Service
+public class ShortLinkCodeService {
 
     public String codeURL(int id) {
         char[] map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
